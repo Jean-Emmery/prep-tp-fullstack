@@ -5,14 +5,11 @@
 
 import * as express from 'express';
 import { k } from '@tp01/knex-lib';
-import knex from 'knex';
-
 const app = express();
+app.use(express.json());
 
-app.get('/api', (req, res) => {
-  res.send({
-    message: 'Welcome to back!',
-  });
+app.get('/api/books', (req, res) => {
+  k.getAllBooks().then(books => res.send(books))
 });
 
 const port = process.env.port || 3333;
@@ -21,8 +18,4 @@ const server = app.listen(port, () => {
 });
 server.on('error', console.error);
 
-function test() {
-  k.HasMany('users', 'books', 'user_id', 1, ['id', 'name']);
-}
 
-test();
