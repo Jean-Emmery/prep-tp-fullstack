@@ -9,10 +9,14 @@ const options = {
 };
 
 const knex = require('knex')(options);
+
 class KnexLib {
   getAllBooks() {
-    return knex('books').select('*')
-  } 
+    return knex('users').select('*')
+  }
+  createUser(username) {
+    return knex('users').insert({ name: username })
+  }
 }
 
 export const k = new KnexLib();

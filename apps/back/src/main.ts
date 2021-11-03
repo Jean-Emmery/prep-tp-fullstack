@@ -12,6 +12,10 @@ app.get('/api/books', (req, res) => {
   k.getAllBooks().then(books => res.send(books))
 });
 
+app.post('/api/createUser'), (req, res) => {
+  console.log(req)
+}
+
 const port = process.env.port || 3333;
 const server = app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}/api`);
