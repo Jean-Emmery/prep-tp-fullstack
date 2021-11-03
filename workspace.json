@@ -1,0 +1,167 @@
+{
+  "version": 2,
+  "projects": {
+    "back": {
+      "root": "apps/back",
+      "sourceRoot": "apps/back/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/back",
+            "main": "apps/back/src/main.ts",
+            "tsConfig": "apps/back/tsconfig.app.json",
+            "assets": ["apps/back/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/back/src/environments/environment.ts",
+                  "with": "apps/back/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "back:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/back/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/back"],
+          "options": {
+            "jestConfig": "apps/back/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "knex-lib": {
+      "root": "libs/knex-lib",
+      "sourceRoot": "libs/knex-lib/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/knex-lib/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/knex-lib"],
+          "options": {
+            "jestConfig": "libs/knex-lib/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "my-app": {
+      "projectType": "application",
+      "root": "apps/my-app",
+      "sourceRoot": "apps/my-app/src",
+      "targets": {
+        "build": {
+          "executor": "@nx-plus/vue:browser",
+          "options": {
+            "dest": "dist/apps/my-app",
+            "index": "apps/my-app/public/index.html",
+            "main": "apps/my-app/src/main.ts",
+            "tsConfig": "apps/my-app/tsconfig.app.json"
+          },
+          "configurations": {
+            "production": {
+              "mode": "production",
+              "filenameHashing": true,
+              "productionSourceMap": true,
+              "css": {
+                "extract": true,
+                "sourceMap": false
+              }
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nx-plus/vue:dev-server",
+          "options": {
+            "browserTarget": "my-app:build",
+            "devServer": {
+              "proxy": {
+                "^/api": {
+                  "target": "http://192.168.1.10:3333",
+                  "secure": false
+                }
+              }
+            }
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "my-app:build:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/my-app/**/*.{ts,tsx,vue}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/my-app"],
+          "options": {
+            "jestConfig": "apps/my-app/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "my-app-e2e": {
+      "root": "apps/my-app-e2e",
+      "sourceRoot": "apps/my-app-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/my-app-e2e/cypress.json",
+            "devServerTarget": "my-app:serve",
+            "tsConfig": "apps/my-app-e2e/tsconfig.json"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "my-app:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/my-app-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/express"
+  },
+  "defaultProject": "back"
+}
