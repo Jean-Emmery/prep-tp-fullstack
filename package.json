@@ -28,6 +28,7 @@
   },
   "private": true,
   "dependencies": {
+    "axentix": "^1.3.3",
     "axios": "^0.24.0",
     "body-parser": "^1.19.0",
     "express": "4.17.1",

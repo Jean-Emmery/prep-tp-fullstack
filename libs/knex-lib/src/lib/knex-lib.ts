@@ -17,6 +17,12 @@ class KnexLib {
   createUser(username) {
     return knex('users').insert({ name: username })
   }
+  editUser(id, username) {
+    return knex('users').where({ id: id }).update({ name: username })
+  }
+  deleteUser(id) {
+    return knex('users').where({ id: id }).del()
+  }
 }
 
 export const k = new KnexLib();
